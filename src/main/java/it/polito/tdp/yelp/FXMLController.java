@@ -47,34 +47,24 @@ public class FXMLController {
     
     @FXML
     void doRiempiLocali(ActionEvent event) {
-    	this.cmbLocale.getItems().clear();
-    	String citta = this.cmbCitta.getValue();
-    	if(citta != null) {
-    		cmbLocale.getItems().addAll(model.getBusiness(citta));
-    		this.btnCreaGrafo.setDisable(false);
+    	cmbLocale.getItems().clear();
+    	if(this.cmbCitta.getValue()!= null)
+    	{
+    	this.cmbLocale.getItems().addAll(model.getLocali(this.cmbCitta.getValue()));
     		
     	}
     }
+    
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	txtResult.clear();
+    	txtResult.appendText(model.creaGrafo(cmbCitta.getValue(),cmbLocale.getValue()));
     	
-    	txtResult.appendText(model.creaGrafo(cmbLocale.getValue()));
     }
 
     @FXML
     void doTrovaMiglioramento(ActionEvent event) {
-    txtResult.clear();
-    List<Review>miglioramento= model.calcolaPercorso();
-    LocalDate ultima = miglioramento.get(miglioramento.size()-1).getDate();
-    LocalDate prima = miglioramento.get(0).getDate();
-    txtResult.appendText("Giorni prima e ultima recensione + " + ChronoUnit.DAYS.between(ultima, prima));
-    
-    for(Review r : miglioramento)
-    {
-    	txtResult.appendText(" " + r);
-    }
-    
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -89,9 +79,6 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
-    	this.cmbCitta.getItems().addAll(model.getCitta());
-    	this.btnCreaGrafo.setDisable(true);
-    	txtResult.appendText(model.creaGrafo(cmbLocale.getValue()));
-    	txtResult.appendText(model.getUscenti().toString());
+    	this.cmbCitta.getItems().addAll(model.getCity());
     }
 }
